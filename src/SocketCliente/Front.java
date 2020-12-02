@@ -73,28 +73,7 @@ public class Front extends javax.swing.JFrame {
                 
                 tabla.addRow(datos);
             }   
-            tabla.addTableModelListener(new TableModelListener() {
-                
-                @Override
-                public void tableChanged(TableModelEvent e) {
-                    if(e.getType() == TableModelEvent.UPDATE){
-                     int columna = e.getColumn();
-                     int file = e.getFirstRow();
-                     if (columna == 3){
-                      String sqlUP = " UPDATE clientes SET ac_balance = "+tabla.getValueAt(file, columna)+" WHERE id = "+tabla.getValueAt (file, 0)+"; COMMIT; ";
-                      System.out.println(sqlUP);
-
-                     }
-                     if (columna == 1){   
-                     String sqlDEL = " DELETE FROM clientes WHERE id = "+tabla.getValueAt (file, 0)+"; COMMIT; ";
-                     System.out.println(sqlDEL);
-   
-                     }
-                    }
-  
-                }
-
-            }   );
+              
             {
         
          }
@@ -189,11 +168,9 @@ public class Front extends javax.swing.JFrame {
             
         	Statement cStmt = con.createStatement();
             
-            //Statement stmt = con.createStatement();
 
             cStmt.executeUpdate("INSERT INTO clientes VALUES( 0, 'jose', 'maría','sky@sky.com', 'Av viva siempre viva') ");
-            
-            //cStmt.execute();    
+              
    
             System.out.println("el cliente se ha creado correctamente!!!"); 
             
