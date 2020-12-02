@@ -7,7 +7,7 @@ package socketserver;
 
 /**
  *
- * @author Administrator
+ * @author
  */
 
 import java.sql.Connection;
@@ -16,7 +16,7 @@ import java.sql.SQLException;
 
 /**
  *
- * @author Administrator
+ * @author
  */
 public class ConMysql {
   
@@ -25,14 +25,12 @@ public class ConMysql {
    static String login = "root";
    static String password = "";
    static String url = "jdbc:mysql://localhost:3306/xyz";
-   //static String url = "jdbc:oracle:thin:@localhost:1521:XE";
 
  
    Connection conn = null;
 
    public ConMysql () {
       try{
-         //obtenemos el driver de para Oracle
          Class.forName("com.mysql.jdbc.Driver");
          //obtenemos la conexión
          conn = DriverManager.getConnection(url,login,password);

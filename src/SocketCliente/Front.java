@@ -54,17 +54,14 @@ public class Front extends javax.swing.JFrame {
             final Connection con = obj.getConnection();
             Statement st = con.createStatement();
             
-            ResultSet  rs = st.executeQuery("SELECT p.id_ps_person,\n" +
-                                                    "P.ps_number_document,\n" +
-                                                    "p.ps_names ||' '|| p.ps_surnames,\n" +
-                                                    "a.ac_balance,\n" +
-                                                    "s.ad_address,\n" +
-                                                    "e.tp_number_phone\n" +
-                                                    "FROM person p JOIN accounts a ON p.id_ps_person = a.id_ps_person\n" +
-                                                    "JOIN address s ON s.id_ps_person = p.id_ps_person\n" +
-                                                    "JOIN phone e ON e.id_ps_person = p.id_ps_person");
+            ResultSet  rs = st.executeQuery("SELECT cli.id,\n" +
+            										"cli.nombre,\n" +
+                                                    "cli.apellido,\n" +
+                                                    "cli.email,\n" +
+                                                    "cli.direccion\n" +
+                                                    "FROM clientes cli" );
             
-            String datos [] = new String [6];
+            String datos [] = new String [5];
             
             while (rs.next()) {
                 
@@ -73,7 +70,6 @@ public class Front extends javax.swing.JFrame {
                 datos [2] = rs.getString(3);
                 datos [3] = rs.getString(4);
                 datos [4] = rs.getString(5);
-                datos [5] = rs.getString(6);
                 
                 tabla.addRow(datos);
             }   
@@ -85,12 +81,12 @@ public class Front extends javax.swing.JFrame {
                      int columna = e.getColumn();
                      int file = e.getFirstRow();
                      if (columna == 3){
-                      String sqlUP = " UPDATE accounts SET ac_balance = "+tabla.getValueAt(file, columna)+" WHERE id_ps_person = "+tabla.getValueAt (file, 0)+"; COMMIT; ";
+                      String sqlUP = " UPDATE clientes SET ac_balance = "+tabla.getValueAt(file, columna)+" WHERE id = "+tabla.getValueAt (file, 0)+"; COMMIT; ";
                       System.out.println(sqlUP);
 
                      }
                      if (columna == 1){   
-                     String sqlDEL = " DELETE FROM person WHERE id_ps_person = "+tabla.getValueAt (file, 0)+"; COMMIT; ";
+                     String sqlDEL = " DELETE FROM clientes WHERE id = "+tabla.getValueAt (file, 0)+"; COMMIT; ";
                      System.out.println(sqlDEL);
    
                      }
@@ -107,7 +103,7 @@ public class Front extends javax.swing.JFrame {
             
         } catch (SQLException e) {
             
-            System.out.println(e);  
+            System.out.println("consulta incorrecta "+e);  
             
         }
         
@@ -126,13 +122,15 @@ public class Front extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+            	//cada oobjeto debe tener 5 líneas
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
+            //encabezados de la tabla
             new String [] {
-                "ID Cliente", "nombre", "apellido", "email", "Direccion"
+                "id","Nombre", "Apellido", "Email", "Direccion"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -189,9 +187,13 @@ public class Front extends javax.swing.JFrame {
         Connection con = obj.getConnection();
         try {
             
-            CallableStatement cStmt = con.prepareCall("{call CREA_CLIENTE}");
+        	Statement cStmt = con.createStatement();
             
-            cStmt.execute();    
+            //Statement stmt = con.createStatement();
+
+            cStmt.executeUpdate("INSERT INTO clientes VALUES( 0, 'jose', 'maría','sky@sky.com', 'Av viva siempre viva') ");
+            
+            //cStmt.execute();    
    
             System.out.println("el cliente se ha creado correctamente!!!"); 
             
@@ -200,7 +202,7 @@ public class Front extends javax.swing.JFrame {
             
         } catch (Exception e) {
             
-            System.out.println(e); 
+            System.out.println("No se pudo crear cliente "+e); 
         }
         
     }                                        
